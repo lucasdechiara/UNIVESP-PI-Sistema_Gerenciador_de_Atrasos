@@ -5,34 +5,49 @@
   <title>Home</title>
 {% endblock %}
 
-
-
 {% block conteudo %} 
   <!-- Define um espaçamento para centralizar o formulário -->
-  <style>.mt-6 {margin-top: 8rem;}</style>
+  <style>
+    .mt-6 {margin-top: 8rem;}
+    form p {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+
+    form label {
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+  </style>
+
   <!-- Navbar com título centralizado -->
-  <nav style="background-color: darksalmon !important;" class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav role="navigation" aria-label="Menu principal" style="background-color: darksalmon !important;" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid d-flex justify-content-center">
-      <span class="navbar-brand mb-0 h1">SISTEMA DE CONTROLE DE ATRASOS 2.0</span>
+      <span class="navbar-brand mb-0 h1" aria-label="Título do sistema">SISTEMA DE CONTROLE DE ATRASOS 2.0</span>
     </div>
   </nav>
+
   <div class="mt-6"></div>
+
   <!-- Formulário centralizado no meio da tela -->
-  <div class="d-flex flex-column min-vh-75">
+  <main role="main" aria-label="Área de login do sistema" class="d-flex flex-column min-vh-75">
     <div class="d-flex flex-grow-1 align-items-center justify-content-center">
-        <div class="card p-4 shadow-lg" style="width: 300px;">
-            <h2 class="text-center mb-4">Login</h2>
-            {% if form.errors %}
-                <div class="alert alert-danger">Nome de usuário ou senha inválidos.</div>
-            {% endif %}
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="d-grid mt-3">
-                    <button class="btn btn-primary" type="submit">Login</button>
-                </div>
-            </form>
-        </div>
+        <section role="region" aria-label="Formulário de login">
+            <div class="card p-4 shadow-lg" style="width: 300px;">
+                <h2 class="text-center mb-4" id="login-title">Login</h2>
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert" aria-live="assertive">Nome de usuário ou senha inválidos.</div>
+                {% endif %}
+                <form method="post" aria-labelledby="login-title">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid mt-3">
+                        <button class="btn btn-primary" type="submit" role="button" aria-label="Enviar login">Login</button>
+                    </div>
+                </form>
+            </div>
+        </section>
     </div>
-  </div>
+  </main>
 {% endblock %}

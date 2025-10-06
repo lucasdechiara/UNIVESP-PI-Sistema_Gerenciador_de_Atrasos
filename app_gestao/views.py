@@ -6,6 +6,7 @@ from .models import CadastroAlunos, RegAtrasos, Presenca
 import openpyxl
 from openpyxl.styles import PatternFill
 import pandas as pd
+from datetime import date
 
 
 # Verifica se o usuário está no grupo 'Administradores'
@@ -64,7 +65,7 @@ def cadastro(request):
 # realiza o registro da presença dos alunos
 @login_required
 def registrar_presenca(request):
-    data_selecionada = request.POST.get("data") or request.GET.get("data")
+    data_selecionada = request.POST.get("data") or request.GET.get("data") or date.today().isoformat()
     turma_selecionada = request.POST.get("turma") or request.GET.get("turma")
     alunos = []
 

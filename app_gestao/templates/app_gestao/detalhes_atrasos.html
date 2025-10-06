@@ -5,41 +5,46 @@
   <title>Relatório</title>
 {% endblock %}
 
-
 {% block conteudo %}
-  <div class="container mt-4">
-    <h4 class="text-center mb-3">Detalhes de Atrasos</h4>
-    <p><strong>Aluno:</strong> {{ aluno.nome_estudante }}</p>
-    <p><strong>Turma:</strong> {{ turma }}</p>
-    <p><strong>Mês:</strong> {{ mes }}</p>
+  <div class="container mt-4" role="main" aria-labelledby="report-title">
+    <h4 id="report-title" class="text-center mb-3">Detalhes de Atrasos</h4>
+
+    <p aria-label="Nome do aluno"><strong>Aluno:</strong> {{ aluno.nome_estudante }}</p>
+    <p aria-label="Turma do aluno"><strong>Turma:</strong> {{ turma }}</p>
+    <p aria-label="Mês do relatório"><strong>Mês:</strong> {{ mes }}</p>
 
     {% if atrasos %}
-      <table class="table table-bordered text-center">
+      <table class="table table-bordered text-center" role="table" aria-describedby="report-description">
+        <caption id="report-description" class="visually-hidden">
+          Tabela com a lista de atrasos do aluno, incluindo data, hora de chegada e justificativa.
+        </caption>
         <thead>
-          <tr>
-            <th style="width: 20%;">Data do Atraso</th>
-            <th style="width: 20%;">Hora de Chegada</th>
-            <th>Justificativa</th>
+          <tr role="row">
+            <th scope="col" style="width: 20%;">Data do Atraso</th>
+            <th scope="col" style="width: 20%;">Hora de Chegada</th>
+            <th scope="col">Justificativa</th>
           </tr>
         </thead>
         <tbody>
           {% for atraso in atrasos %}
-          <tr>
-            <td>{{ atraso.data_atraso|date:"d/m/Y" }}</td>
-            <td>{{ atraso.horario_chegada }}</td>
-            <td class="text-start">{{ atraso.justificativa }}</td>
+          <tr role="row">
+            <td role="cell" aria-label="Data do atraso">{{ atraso.data_atraso|date:"d/m/Y" }}</td>
+            <td role="cell" aria-label="Hora de chegada">{{ atraso.horario_chegada }}</td>
+            <td role="cell" aria-label="Justificativa do atraso" class="text-start">{{ atraso.justificativa }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
-      <div class="alert alert-info" role="alert">
+      <div class="alert alert-info" role="alert" aria-live="polite">
         Não foram registrados atrasos neste mês.
       </div>
     {% endif %}
   </div>
-  <div class="mt-4 text-center">
-    <a href="javascript:history.back()" class="btn btn-secondary">Voltar</a>
+
+  <div class="mt-4 text-center" role="navigation" aria-label="Ações de navegação do relatório">
+    <a href="javascript:history.back()" class="btn btn-secondary" role="button" aria-label="Voltar para a página anterior">Voltar</a>
   </div>
+
   <div class="container mt-5" style="margin-bottom: 100px;"></div>
 {% endblock %}

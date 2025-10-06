@@ -6,26 +6,47 @@
 {% endblock %}
 
 {% block conteudo %}
-    <h3><p class="text-center"><br>Registrar Atraso de Aluno</p></h3>
-    <div class="container mt-5">
-        
+    <!-- Título principal da página -->
+    <h3>
+      <p class="text-center" id="page-title" aria-label="Registrar atraso de aluno"><br>Registrar Atraso de Aluno</p>
+    </h3>
 
+    <div class="container mt-5" role="main" aria-labelledby="page-title">
+        
         <!-- Exibição de Mensagens -->
         {% if messages %}
             {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+                <div 
+                    class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" 
+                    role="alert"
+                    aria-live="assertive"
+                    aria-atomic="true"
+                >
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button 
+                        type="button" 
+                        class="btn-close" 
+                        data-bs-dismiss="alert" 
+                        aria-label="Fechar mensagem"
+                    ></button>
                 </div>
             {% endfor %}
         {% endif %}
         
         <!-- Formulário para seleção de turma -->
-        <form method="POST">
+        <form method="POST" aria-label="Formulário de seleção de turma">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="turma" class="form-label">Selecione a Turma</label>
-                <select name="turma" id="turma" class="form-select" required onchange="this.form.submit()">
+                <label for="turma" class="form-label" aria-label="Selecione a Turma">Selecione a Turma</label>
+                <select 
+                    name="turma" 
+                    id="turma" 
+                    class="form-select" 
+                    required 
+                    onchange="this.form.submit()"
+                    aria-required="true"
+                    aria-describedby="turma-descricao"
+                >
                     <option value="">-- Escolha uma Turma --</option>
                     {% for turma in turmas %}
                         <option value="{{ turma }}" {% if turma == turma_selecionada %}selected{% endif %}>
@@ -33,27 +54,39 @@
                         </option>
                     {% endfor %}
                 </select>
+                <small id="turma-descricao" class="form-text text-muted">
+                    Escolha uma turma para listar os alunos.
+                </small>
             </div>
         </form>
 
         <!-- Tabela com alunos da turma selecionada -->
         {% if alunos %}
-            <h5 class="mt-4">Alunos da Turma {{ turma_selecionada }}</h5>
-            <table class="table table-hover table-bordered">
+            <h5 class="mt-4" id="alunos-titulo" aria-label="Lista de alunos da turma selecionada">
+                Alunos da Turma {{ turma_selecionada }}
+            </h5>
+            <table class="table table-hover table-bordered" role="table" aria-labelledby="alunos-titulo">
                 <thead class="table-light">
                     <tr>
-                        <th>Nome do Aluno</th>
+                        <th scope="col">Nome do Aluno</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for aluno in alunos %}
-                        <tr onclick="window.location.href='{% url 'registrar_atraso_aluno' aluno.ra %}'" style="cursor: pointer;">
-                            <td>{{ aluno.nome_estudante }}</td>
+                        <tr 
+                            onclick="window.location.href='{% url 'registrar_atraso_aluno' aluno.ra %}'" 
+                            style="cursor: pointer;"
+                            role="row"
+                            tabindex="0"
+                            aria-label="Clique para registrar atraso de {{ aluno.nome_estudante }}"
+                        >
+                            <td role="cell">{{ aluno.nome_estudante }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% endif %}
     </div>
+
     <div class="container mt-5" style="margin-bottom: 100px;"></div>
 {% endblock %}
