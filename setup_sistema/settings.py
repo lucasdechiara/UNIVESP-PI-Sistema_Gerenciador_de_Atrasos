@@ -44,6 +44,8 @@ DJANGO_APPS = [
 
 MEUS_APPS = [
     "app_gestao.apps.AppGestaoConfig",
+    "rest_framework",
+    "rest_framework.authtoken",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + MEUS_APPS
@@ -57,6 +59,17 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+#opções globais do DRF
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication',], # autenticação via token
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.IsAuthenticated',  # requer login/token por padrão
+        'rest_framework.permissions.AllowAny', # permite acesso público por padrão
+    ]
+}
+
+
 
 #para deploy no render
 # Arquivos estáticos (CSS, JavaScript, Imagens)

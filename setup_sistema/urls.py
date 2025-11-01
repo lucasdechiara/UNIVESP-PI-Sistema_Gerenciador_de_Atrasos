@@ -16,12 +16,18 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from app_gestao import views
 from django.contrib.auth import views as auth_views
 
+#para api
+from rest_framework.routers import DefaultRouter
+
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('', include('app_gestao.urls')), # importa TODAS as rotas do app
     path('', auth_views.LoginView.as_view(template_name='app_gestao/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path("home/", views.home, name="home"),

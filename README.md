@@ -53,9 +53,38 @@ ROBSON DOS SANTOS PIMENTA MARTINS
 * Caso o percentual seja superior a 50% a linha fica vermelha.
 7. Um relatório .xlsx com a relação de atrasos e justificativas pode ser extraído do sistema.
 
-### Bibliotecas:
-* utilize o arquivo "requirements.txt" para instalar as bibliotecas necessárias
- 
+### Instalação:
+1. Baixe os arquivos do GitHub em uma pasta.
+2. Crie um ambiente virtual nesta pasta para isolar o sistema.
+3. Ative o ambiente virtual e utilize o arquivo "requirements.txt" para instalar as bibliotecas necessárias
+4. Crie o arquivo ".env" na pasta, insira no arquivo as variáveis do sistema
+```PYTHON
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY=#crie a chave
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG=True
+
+# ajuste conforme necessário
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+#Configurando para o PostgreSQL, se não for especificado o sistema usa o SQLite
+DATABASE_URL=postgres://postgres:"troque_pela_senha_PostgreSQL"@localhost:"porta/nome_bd"
+```
+4. Execute o fluxo do Djando:
+```PYTHON
+  #4.1. Aplicar Migrações do Banco de Dados:
+    python manage.py migrate
+```
+```PYTHON
+  #4.2. Criar o Superusuário (Se Necessário):
+    python manage.py createsuperuser
+```
+```PYTHON
+  #4.3. Iniciar o Servidor de Desenvolvimento:
+    python manage.py runserver
+```
+
 ### Métodos e Instrumentos:
 * Linguagem de Programação: Python
 * Framework Web: Django
