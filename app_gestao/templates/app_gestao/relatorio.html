@@ -7,13 +7,27 @@
 
 
 {% block conteudo %}
-  <div class="container mt-4">
-    <h3 class="text-center">Relatório de Presenças e Atrasos</h3>
+  <div class="container mt-4" role="main" aria-labelledby="page-title">
+    <h3 class="text-center" id="page-title" aria-label="Relatório de Presenças e Atrasos">
+      Relatório de Presenças e Atrasos
+    </h3>
 
-    <form method="get" class="row g-3 align-items-end mb-4">
+    <!-- Formulário de seleção de filtros -->
+    <form 
+      method="get" 
+      class="row g-3 align-items-top mb-4" 
+      aria-label="Formulário para geração de relatório de presença e atrasos"
+    >
       <div class="col-md-3">
-          <label for="mes" class="form-label">Mês</label>
-          <select name="mes" id="mes" class="form-select" required>
+          <label for="mes" class="form-label" aria-label="Selecione o mês">Mês</label>
+          <select 
+            name="mes" 
+            id="mes" 
+            class="form-select" 
+            required 
+            aria-required="true"
+            aria-describedby="descricao-mes"
+          >
             <option value="">Selecione</option>
             {% for numero, nome in meses %}
                 <option value="{{ numero }}" {% if mes == numero|stringformat:"i" %}selected{% endif %}>
@@ -21,56 +35,101 @@
                 </option>
             {% endfor %}
           </select>
+          <small id="descricao-mes" class="form-text text-muted">
+            Escolha o mês para gerar o relatório.
+          </small>
       </div>
+
       <div class="col-md-4">
-          <label for="turma" class="form-label">Turma</label>
-          <select name="turma" id="turma" class="form-select" required>
+          <label for="turma" class="form-label" aria-label="Selecione a turma">Turma</label>
+          <select 
+            name="turma" 
+            id="turma" 
+            class="form-select" 
+            required 
+            aria-required="true"
+            aria-describedby="descricao-turma"
+          >
               <option value="">Selecione</option>
               {% for t in turmas %}
                   <option value="{{ t }}" {% if turma == t %}selected{% endif %}>{{ t }}</option>
               {% endfor %}
           </select>
+          <small id="descricao-turma" class="form-text text-muted">
+            Escolha a turma para visualizar os dados.
+          </small>
       </div>
-      <div class="col-md-2">
-          <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+
+      <div class="col-md-2 d-flex align-items-center">
+          <button 
+            style="margin-top: 8px;"
+            type="submit" 
+            class="btn btn-primary"
+            aria-label="Gerar relatório com base nos filtros selecionados"
+          >
+            Gerar Relatório
+          </button>
       </div>
     </form>
 
+    <!-- Exibição da tabela do relatório -->
     {% if relatorio %}
-    <table class="table table-bordered text-center">
+    <table 
+      class="table table-bordered text-center" 
+      role="table" 
+      aria-label="Tabela com dados de presença e atrasos dos alunos"
+    >
         <thead>
-            <tr>
-                <th>Aluno</th>
-                <th style="width: 10%;">Turma</th>
-                <th style="width: 10%;">Mês</th>
-                <th style="width: 10%;">Presenças</th>
-                <th style="width: 10%;">Atrasos</th>
-                <th style="width: 10%;">% Atraso</th>
+            <tr role="row">
+                <th scope="col">Aluno</th>
+                <th scope="col" style="width: 10%;">Turma</th>
+                <th scope="col" style="width: 10%;">Mês</th>
+                <th scope="col" style="width: 10%;">Presenças</th>
+                <th scope="col" style="width: 10%;">Atrasos</th>
+                <th scope="col" style="width: 10%;">Percentual de Atraso</th>
             </tr>
         </thead>
         <tbody>
             {% for item in relatorio %}
-            <tr class="{% if item.cor %}table-{{ item.cor }}{% endif %}">
-              <td class="text-start">
-                <a href="{% url 'detalhes_atrasos' item.aluno.ra %}?mes={{ mes }}&turma={{ turma }}" class="text-decoration-none text-dark">
+            <tr 
+              class="{% if item.cor %}table-{{ item.cor }}{% endif %}" 
+              role="row"
+              aria-label="Dados de {{ item.aluno.nome_estudante }}"
+            >
+              <td class="text-start" role="cell">
+                <a 
+                  href="{% url 'detalhes_atrasos' item.aluno.ra %}?mes={{ mes }}&turma={{ turma }}" 
+                  class="text-decoration-none text-dark"
+                  aria-label="Ver detalhes dos atrasos de {{ item.aluno.nome_estudante }}"
+                >
                   {{ item.aluno.nome_estudante }}
                 </a>
               </td>
-              <td>{{ item.aluno.serie_turma }}</td>
-              <td>{{ nome_mes }}</td>
-              <td>{{ item.presencas }}</td>
-              <td>{{ item.atrasos }}</td>
-              <td>{{ item.percentual }}%</td>
+              <td role="cell">{{ item.aluno.serie_turma }}</td>
+              <td role="cell">{{ nome_mes }}</td>
+              <td role="cell">{{ item.presencas }}</td>
+              <td role="cell">{{ item.atrasos }}</td>
+              <td role="cell">{{ item.percentual }}%</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <!-- Botão de exportação -->
     <div class="text-center">
-      <a href="?mes={{ mes }}&turma={{ turma }}&exportar=1" class="btn btn-success">Exportar para Excel</a>
+      <a 
+        href="?mes={{ mes }}&turma={{ turma }}&exportar=1" 
+        class="btn btn-success"
+        role="button"
+        aria-label="Exportar relatório de {{ nome_mes }} para Excel"
+      >
+        Exportar para Excel
+      </a>
     </div>
     
     {% endif %}
   </div>
+
+  <!-- Espaço inferior -->
   <div class="container mt-5" style="margin-bottom: 100px;"></div>
 {% endblock %}

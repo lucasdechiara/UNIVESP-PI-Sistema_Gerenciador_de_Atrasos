@@ -5,33 +5,51 @@
   <title>Home</title>
 {% endblock %}
 
-
 {% block conteudo %}
-  <h3><p class="text-center"><br>ESCOLA ESTADUAL FADLO HAIDAR</p></h3>
-  <h4><p class="text-center">SISTEMA DE CONTROLE DE ATRASOS 2.0</p></h4>
-  <div class="container">
-    <p class="text-justify">
-      <strong>OBJETIVO:</strong> Gerenciar o horário de entrada dos estudantes que chegam após o fechamento dos portões.<br>
-      <strong>USUÁRIOS:</strong> Este sistema deve ser utilizado pelo setor da secretaria e equipe de gestão.
-    </p>
+  <main class="container mt-4" role="main" aria-labelledby="page-title">
+    <h3 id="page-title" class="text-center" aria-label="Escola Estadual Fadlo Haidar">
+      <p class="text-center"><br>ESCOLA ESTADUAL FADLO HAIDAR</p>
+    </h3>
+    <h4 class="text-center" aria-label="Sistema de Controle de Atrasos 2.0">
+      <p class="text-center">SISTEMA DE CONTROLE DE ATRASOS 2.0</p>
+    </h4>
 
-    <h6><p class="text-start">FUNCIONALIDADES:</p></h6>
-    <p class="text-left">
-      <ul>
-        <li><strong>Cadastrar Turmas:</strong> As turmas são carregadas no sistema utilizando arquivos .xlsx.<br>
-          <strong>ATENÇÃO!</strong> o arquivo .xlsx deve conter 7 colunas, nomeadas EXATAMENTE como descritas abaixo.</li>
-          <ul>
-            <li>R.A.</li>
-            <li>Nome do estudante</li>
-            <li>Série/turma</li>
-            <li>Endereço</li>
-            <li>Responsável 1</li>
-            <li>Responsável 2</li>
-            <li>Contato(s)</li>
-          </ul>
-        <li><strong>Registrar Presença:</strong> Nesta guia são registradas as presenças dos alunos.</li>
-        <li><strong>Registrar Atrasos:</strong> Nesta guia são registrados os atrasos dos alunos que chegaram após o fechamento dos portões.</li>
-        <li><strong>Relatório:</strong> Apresenta o relatório com o registro de presença administrativa e os registros de atraso dos alunos por turma.</li>
-      </ul>
-  </div>
+    <div class="container" aria-label="Descrição do sistema e objetivos">
+      <p class="text-justify" aria-label="Descrição dos objetivos do sistema">
+        <strong>OBJETIVO:</strong> Gerenciar o horário de entrada dos estudantes que chegam após o fechamento dos portões.<br>
+        <strong>USUÁRIOS:</strong> Este sistema deve ser utilizado pelo setor da secretaria e equipe de gestão.
+      </p>
+
+      <h6 class="text-start" id="funcionalidades-title" aria-label="Título das funcionalidades">FUNCIONALIDADES:</h6>
+      <section aria-labelledby="funcionalidades-title" role="region">
+        <ul aria-label="Lista de funcionalidades do sistema">
+          <li aria-label="Funcionalidade de cadastro de turmas">
+            <strong>Cadastrar Turmas:</strong> As turmas são carregadas no sistema utilizando arquivos .xlsx.<br>
+            <strong>ATENÇÃO!</strong> o arquivo .xlsx deve conter 7 colunas, nomeadas EXATAMENTE como descritas abaixo.
+            <ul aria-label="Estrutura obrigatória do arquivo Excel">
+              <li>R.A.</li>
+              <li>Nome do estudante</li>
+              <li>Série/turma</li>
+              <li>Endereço</li>
+              <li>Responsável 1</li>
+              <li>Responsável 2</li>
+              <li>Contato(s)</li>
+            </ul>
+          </li>
+
+          <li aria-label="Funcionalidade de registro de presença">
+            <strong>Registrar Presença:</strong> Nesta guia são registradas as presenças dos alunos.
+          </li>
+
+          <li aria-label="Funcionalidade de registro de atrasos">
+            <strong>Registrar Atrasos:</strong> Nesta guia são registrados os atrasos dos alunos que chegaram após o fechamento dos portões.
+          </li>
+
+          <li aria-label="Funcionalidade de relatório">
+            <strong>Relatório:</strong> Apresenta o relatório com o registro de presença administrativa e os registros de atraso dos alunos por turma.
+          </li>
+        </ul>
+      </section>
+    </div>
+  </main>
 {% endblock %}

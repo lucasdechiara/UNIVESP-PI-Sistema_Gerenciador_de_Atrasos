@@ -1,41 +1,55 @@
 {% extends 'app_gestao/base.html' %}
 
 <!-- titulo da guia na página do navegador -->
- {% block titulo %}
+{% block titulo %}
   <title>Cadastrar Turmas</title>
 {% endblock %}
 
-
 {% block conteudo %}
-    <div class="container">
-        <h3><p class="text-center"><br>Cadastrar Alunos</p></h3>
+    <!-- Área principal da página -->
+    <main class="container" role="main" aria-labelledby="titulo-principal">
+        <h3 id="titulo-principal"><p class="text-center"><br>Cadastrar Alunos</p></h3>
 
         <!-- Exibição de Mensagens -->
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
+            <section aria-live="polite" aria-atomic="true">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert" aria-label="Mensagem do sistema: {{ message }}">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar mensagem"></button>
+                    </div>
+                {% endfor %}
+            </section>
         {% endif %}
 
-        <form method="post" enctype="multipart/form-data">
+        <!-- Formulário de upload de alunos -->
+        <form method="post" enctype="multipart/form-data" role="form" aria-labelledby="formulario-cadastro-alunos">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="arquivo_xlsx" class="form-label">Selecione o arquivo .xlsx com os dados dos alunos para cadastrar no sistema:</label>
-                <input type="file" name="arquivo_xlsx" class="form-control" id="arquivo_xlsx">
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Enviar</button>
-            </div>
+            <fieldset id="formulario-cadastro-alunos">
+                <legend class="visually-hidden">Formulário para upload de alunos via arquivo Excel</legend>
+
+                <div class="mb-3">
+                    <label for="arquivo_xlsx" class="form-label">
+                        Selecione o arquivo .xlsx com os dados dos alunos para cadastrar no sistema:
+                    </label>
+                    <input type="file" name="arquivo_xlsx" class="form-control" id="arquivo_xlsx" aria-describedby="descricao-arquivo">
+                    <small id="descricao-arquivo" class="form-text text-muted">
+                        Somente arquivos com extensão .xlsx são aceitos.
+                    </small>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" aria-label="Enviar arquivo de alunos para cadastro">Enviar</button>
+                </div>
+            </fieldset>
         </form>
-    </div>
+    </main>
 
     <!-- Exclusão de alunos -->
-    <div class="container mt-4">
+    <section class="container mt-4" role="region" aria-labelledby="titulo-exclusao-aluno">
         <div class="card-body">
-            <form id="form-excluir-aluno" method="POST" action="{% url 'excluir_aluno' %}">
+            <h4 id="titulo-exclusao-aluno" class="visually-hidden">Exclusão de aluno</h4>
+            <form id="form-excluir-aluno" method="POST" action="{% url 'excluir_aluno' %}" role="form" aria-describedby="descricao-exclusao">
                 {% csrf_token %}
                 <div class="mt-3">
                     <label for="ra-excluir" class="form-label">
@@ -45,22 +59,27 @@
                 <div class="input-group mt-2">
                     <input type="text" id="ra-excluir" name="ra" class="form-control"
                         required placeholder="Exemplo: 123456"
-                        aria-label="O aluno com o RA informado será excluído"
-                        aria-describedby="btn-buscar-aluno">
-                    <button type="submit" class="btn btn-danger" id="btn-buscar-aluno">Excluir</button>
+                        aria-label="Campo para informar o RA do aluno a ser excluído"
+                        aria-describedby="btn-buscar-aluno descricao-exclusao">
+                    <button type="submit" class="btn btn-danger" id="btn-buscar-aluno" aria-label="Confirmar exclusão do aluno pelo RA informado">
+                        Excluir
+                    </button>
                 </div>
+                <small id="descricao-exclusao" class="form-text text-muted">
+                    A exclusão remove permanentemente o aluno do sistema.
+                </small>
             </form>
         </div>
-    </div>
-
+    </section>
 
     <!-- Botão para limpar o banco -->
-    <div class="text-center" style="margin-top: 4rem;">
+    <section class="text-center" style="margin-top: 4rem;" role="region" aria-labelledby="titulo-limpar-banco">
+        <h4 id="titulo-limpar-banco" class="visually-hidden">Limpeza do banco de dados</h4>
         {% if is_admin %}
-            <label class="form-label">
+            <label class="form-label" for="botao-limpar-banco">
                 No início do ano letivo, antes de cadastrar novas turmas, deve efetuar a limpeza do banco de dados:
             </label><br>
-            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmClearModal">
+            <button id="botao-limpar-banco" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmClearModal" aria-haspopup="dialog" aria-controls="confirmClearModal" aria-label="Abrir janela de confirmação para limpar banco de dados">
                 Limpar Banco de Dados
             </button>
         {% else %}
@@ -68,31 +87,31 @@
                 No início do ano letivo, antes de cadastrar novas turmas, <strong>SOLICITE AO ADMINISTRADOR</strong> a limpeza do banco de dados.
             </label>
         {% endif %}
-    </div>
+    </section>
 
     <!-- Modal de Confirmação -->
-    <div class="modal fade" id="confirmClearModal" tabindex="-1" aria-labelledby="confirmClearModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="confirmClearModal" tabindex="-1" aria-labelledby="confirmClearModalLabel" aria-hidden="true" role="dialog">
+        <div class="modal-dialog" role="document" aria-modal="true">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmClearModalLabel">Confirmação</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar janela de confirmação"></button>
                 </div>
                 <div class="modal-body">
                     Tem certeza que deseja apagar todos os dados do banco de dados? Essa ação não pode ser desfeita!<br>
-                    Serão apagados todas as turmas cadastradas e os registros de presença e atraso.<br>
+                    Serão apagadas todas as turmas cadastradas e os registros de presença e atraso.<br>
                     Esta ação é recomendada para ser executada no início do ano letivo, eliminando todos os registros do ano anterior.
-                </div>                
+                </div>
                 <div class="modal-footer">
                     <form method="post" action="{% url 'limpar_banco' %}">
                         {% csrf_token %}
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Sim, apagar tudo</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Cancelar exclusão dos dados">Cancelar</button>
+                        <button type="submit" class="btn btn-danger" aria-label="Confirmar exclusão total dos dados do sistema">Sim, apagar tudo</button>
                     </form>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
-    
+
     <div class="container mt-5" style="margin-bottom: 100px;"></div>
 {% endblock %}

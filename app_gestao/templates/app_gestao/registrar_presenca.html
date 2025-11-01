@@ -7,60 +7,108 @@
 
 
 {% block conteudo %}
-    <div class="container mt-5">
-        <h3 class="text-center">Registrar Presença</h3>
+    <div class="container mt-5" role="main" aria-labelledby="page-title">
+        <h3 class="text-center" id="page-title" aria-label="Registrar Presença">Registrar Presença</h3>
 
         <!-- Exibição de Mensagens -->
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <div 
+                    class="alert alert-{{ message.tags }} alert-dismissible fade show" 
+                    role="alert"
+                    aria-live="assertive"
+                    aria-atomic="true"
+                >
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button 
+                        type="button" 
+                        class="btn-close" 
+                        data-bs-dismiss="alert" 
+                        aria-label="Fechar mensagem"
+                    ></button>
                 </div>
             {% endfor %}
         {% endif %}
 
-        <form method="GET" class="mb-4">
-            <div class="row g-3 align-items-end">
+        <!-- Formulário de seleção de data e turma -->
+        <form method="GET" class="mb-4" aria-label="Formulário para selecionar data e turma">
+            <div class="row g-3 align-items-top">
                 <div class="col-md-4">
-                    <label for="data" class="form-label">Data</label>
-                    <input type="date" id="data" name="data" class="form-control" value="{{ data_selecionada }}" required>
+                    <label for="data" class="form-label" aria-label="Data da presença">Data</label>
+                    <input 
+                        type="date" 
+                        id="data" 
+                        name="data" 
+                        class="form-control" 
+                        value="{{ data_selecionada }}" 
+                        required 
+                        aria-required="true"
+                    >
                 </div>
                 <div class="col-md-4">
-                    <label for="turma" class="form-label">Turma</label>
-                    <select name="turma" id="turma" class="form-select" required>
+                    <label for="turma" class="form-label" aria-label="Turma">Turma</label>
+                    <select 
+                        name="turma" 
+                        id="turma" 
+                        class="form-select" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="turma-descricao"
+                    >
                         <option value="">Selecione</option>
                         {% for turma in turmas %}
                             <option value="{{ turma }}" {% if turma == turma_selecionada %}selected{% endif %}>{{ turma }}</option>
                         {% endfor %}
                     </select>
+                    <small id="turma-descricao" class="form-text text-muted">
+                        Escolha a turma para listar os alunos.
+                    </small>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary">Listar Alunos</button>
+                <div class="col-md-2 d-flex align-items-center">
+                    <button 
+                        style="margin-top: 8px;"
+                        type="submit" 
+                        class="btn btn-primary"
+                        aria-label="Listar alunos da turma selecionada"
+                    >
+                        Listar Alunos
+                    </button>
                 </div>
             </div>
         </form>
 
+        <!-- Tabela de alunos e presença -->
         {% if alunos %}
-        <form method="POST">
+        <form method="POST" aria-label="Formulário para registrar presenças dos alunos">
             {% csrf_token %}
             <input type="hidden" name="data" value="{{ data_selecionada }}">
             <input type="hidden" name="turma" value="{{ turma_selecionada }}">
-            <table class="table table-bordered">
+            
+            <table 
+                class="table table-bordered" 
+                role="table" 
+                aria-label="Tabela de presença dos alunos"
+            >
                 <thead>
-                    <tr>
-                        <th>R.A.</th>
-                        <th>Nome</th>
-                        <th>Presença</th>
+                    <tr role="row">
+                        <th scope="col">R.A.</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Presença</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for aluno in alunos %}
-                    <tr>
-                        <td>{{ aluno.ra }}</td>
-                        <td>{{ aluno.nome_estudante }}</td>
-                        <td>
-                            <select name="presenca_{{ aluno.ra }}" class="form-select">
+                    <tr role="row">
+                        <td role="cell">{{ aluno.ra }}</td>
+                        <td role="cell">{{ aluno.nome_estudante }}</td>
+                        <td role="cell">
+                            <label for="presenca_{{ aluno.ra }}" class="visually-hidden">Presença de {{ aluno.nome_estudante }}</label>
+                            <select 
+                                name="presenca_{{ aluno.ra }}" 
+                                id="presenca_{{ aluno.ra }}" 
+                                class="form-select"
+                                aria-label="Selecionar presença ou ausência para {{ aluno.nome_estudante }}"
+                            >
                                 <option value="presente" selected>Presente</option>
                                 <option value="ausente">Ausente</option>
                             </select>
@@ -69,12 +117,21 @@
                     {% endfor %}
                 </tbody>
             </table>
+
             <!--<button type="submit" name="registrar" class="btn btn-success">Registrar Presenças</button>-->
             <div class="text-center mt-4">
-                <button type="submit" name="registrar" class="btn btn-success">Registrar Presença</button>
+                <button 
+                    type="submit" 
+                    name="registrar" 
+                    class="btn btn-success"
+                    aria-label="Registrar presença dos alunos listados"
+                >
+                    Registrar Presença
+                </button>
             </div>
         </form>
         {% endif %}
     </div>
+    
     <div class="container mt-5" style="margin-bottom: 100px;"></div>
 {% endblock %}
