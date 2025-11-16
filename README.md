@@ -63,25 +63,29 @@ ROBSON DOS SANTOS PIMENTA MARTINS
 SECRET_KEY=#crie a chave
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG=True
+DEBUG=False
 
 # ajuste conforme necessário
-ALLOWED_HOSTS=localhost,127.0.0.1
+ALLOWED_HOSTS=localhost,127.0.0.1,univesp-fadlo-gerenciador.onrender.com
 
 #Configurando para o PostgreSQL, se não for especificado o sistema usa o SQLite
 DATABASE_URL=postgres://postgres:"troque_pela_senha_PostgreSQL"@localhost:"porta/nome_bd"
 ```
 4. Execute o fluxo do Djando:
 ```PYTHON
-  #4.1. Aplicar Migrações do Banco de Dados:
+  #4.1. Detecta alterações em models.py:
+    python manage.py makemigrations
+```
+```PYTHON
+  #4.2. Aplicar Migrações do Banco de Dados:
     python manage.py migrate
 ```
 ```PYTHON
-  #4.2. Criar o Superusuário (Se Necessário):
+  #4.3. Criar o Superusuário (Se Necessário):
     python manage.py createsuperuser
 ```
 ```PYTHON
-  #4.3. Iniciar o Servidor de Desenvolvimento:
+  #4.4. Iniciar o Servidor de Desenvolvimento:
     python manage.py runserver
 ```
 
@@ -96,7 +100,7 @@ DATABASE_URL=postgres://postgres:"troque_pela_senha_PostgreSQL"@localhost:"porta
 
 
 ### Apresentação do sistema no YouTube:
-<a href="https://www.youtube.com/watch?v=QbGWYWc5gDA">
+<a href="https://www.youtube.com/watch?v=9lZc5c0ISLQ&feature=youtu.be">
   <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="50" />
 </a>
 
