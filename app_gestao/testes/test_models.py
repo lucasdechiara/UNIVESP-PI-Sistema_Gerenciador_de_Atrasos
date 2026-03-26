@@ -1,6 +1,9 @@
-from django.test import TestCase
-from app_gestao.models import CadastroAlunos, RegAtrasos, Presenca
 from datetime import date, time
+
+from django.test import TestCase
+
+from app_gestao.models import CadastroAlunos, Presenca, RegAtrasos
+
 
 class ModelsTests(TestCase):
     def setUp(self):
@@ -11,7 +14,7 @@ class ModelsTests(TestCase):
             endereco="Rua X, 123",
             responsavel1="Maria Silva",
             responsavel2="José Silva",
-            contato="11999999999"
+            contato="11999999999",
         )
 
     def test_cadastro_alunos_str(self):
@@ -22,7 +25,7 @@ class ModelsTests(TestCase):
             ra=self.aluno,
             data_atraso=date.today(),
             horario_chegada=time(8, 30),
-            justificativa="Trânsito"
+            justificativa="Trânsito",
         )
         self.assertEqual(str(atraso), f"Atraso de {self.aluno} em {date.today()}")
 
