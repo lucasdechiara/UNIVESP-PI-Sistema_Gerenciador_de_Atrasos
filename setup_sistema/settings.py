@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
-from decouple import config, Csv
-from dj_database_url import parse as db_url
 import os
+from pathlib import Path
+
+from decouple import Csv, config
+from dj_database_url import parse as db_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,27 +61,26 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-#opções globais do DRF
+# opções globais do DRF
 REST_FRAMEWORK = {
     # 'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication',], # autenticação via token
-    'DEFAULT_PERMISSION_CLASSES': [
+    "DEFAULT_PERMISSION_CLASSES": [
         #'rest_framework.permissions.IsAuthenticated',  # requer login/token por padrão
-        'rest_framework.permissions.AllowAny', # permite acesso público por padrão
+        "rest_framework.permissions.AllowAny",  # permite acesso público por padrão
     ]
 }
 
 
-
-#para deploy no render
+# para deploy no render
 # Arquivos estáticos (CSS, JavaScript, Imagens)
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # WhiteNoise para servir arquivos estáticos no Render
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 # Melhor desempenho ao servir arquivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 ROOT_URLCONF = "setup_sistema.urls"
@@ -134,10 +134,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#Login
-LOGIN_REDIRECT_URL = '/home/'  # Para onde redirecionar após login bem-sucedido
-LOGOUT_REDIRECT_URL = '/'  # Para onde redirecionar após logout
-LOGIN_URL = '/'  # URL para onde redirecionar se o usuário não estiver autenticado
+# Login
+LOGIN_REDIRECT_URL = "/home/"  # Para onde redirecionar após login bem-sucedido
+LOGOUT_REDIRECT_URL = "/"  # Para onde redirecionar após logout
+LOGIN_URL = "/"  # URL para onde redirecionar se o usuário não estiver autenticado
 
 
 # Internationalization
@@ -164,4 +164,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Expira a sessão quando o navegador for fechado
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-

@@ -1,0 +1,46 @@
+name: Django PR CI
+
+on:
+  pull_request:
+    branches:
+      - main  # qualquer PR que queira mergear no main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout do código do PR (do fork automaticamente)
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # pega todo o histórico para rebase se necessário
+
+      # 2. Configura Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # 3. Instala dependências
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Rodar testes Django
+      - name: Run Django tests
+        run: |
+          python manage.py test
+
+      # 5. Checagem de formatação (Black)
+      - name: Check code formatting
+        run: |
+          pip install black
+          black --check .
+
+      # 6. Checagem de imports (isort)
+      - name: Check import sorting
+        run: |
+          pip install isort
+          isort --check-only .
