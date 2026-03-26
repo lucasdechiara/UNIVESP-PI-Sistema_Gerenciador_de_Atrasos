@@ -12,6 +12,7 @@ jobs:
     env:
       SECRET_KEY: 'test-secret-key'
       DEBUG: '1'
+      ALLOWED_HOSTS: '127.0.0.1,localhost'
 
     steps:
       # 1. Checkout do código do PR (do fork automaticamente)
