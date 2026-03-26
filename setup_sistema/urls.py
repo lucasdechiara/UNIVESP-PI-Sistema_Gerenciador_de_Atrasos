@@ -18,8 +18,6 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
-
-# para api
 from rest_framework.routers import DefaultRouter
 
 from app_gestao import views

@@ -1,8 +1,6 @@
 # views da API
 
 from rest_framework import permissions, status, viewsets
-
-# função do relatório
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
