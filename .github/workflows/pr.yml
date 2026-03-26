@@ -9,6 +9,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      SECRET_KEY: 'test-secret-key'
+      DEBUG: '1'
+
     steps:
       # 1. Checkout do código do PR (do fork automaticamente)
       - name: Checkout repository
