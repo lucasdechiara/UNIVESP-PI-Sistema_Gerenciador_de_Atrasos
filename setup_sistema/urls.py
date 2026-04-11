@@ -16,28 +16,39 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
-from app_gestao import views
 from django.contrib.auth import views as auth_views
-
-#para api
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-
+from app_gestao import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('app_gestao.urls')), # importa TODAS as rotas do app
-    path('', auth_views.LoginView.as_view(template_name='app_gestao/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    path("", include("app_gestao.urls")),  # importa TODAS as rotas do app
+    path(
+        "",
+        auth_views.LoginView.as_view(template_name="app_gestao/login.html"),
+        name="login",
+    ),
+    path("logout/", auth_views.LogoutView.as_view(next_page="login"), name="logout"),
     path("home/", views.home, name="home"),
     path("cadastrar_alunos/", views.cadastro, name="cadastro"),
-    path('limpar_banco/', views.limpar_banco, name='limpar_banco'),
+    path("limpar_banco/", views.limpar_banco, name="limpar_banco"),
     path("registrar_presenca/", views.registrar_presenca, name="registrar_presenca"),
     path("registrar_atraso/", views.registrar_atraso, name="registrar_atraso"),
-    path('registrar_atraso/<str:ra>/', views.registrar_atraso_aluno, name='registrar_atraso_aluno'),
+    path(
+        "registrar_atraso/<str:ra>/",
+        views.registrar_atraso_aluno,
+        name="registrar_atraso_aluno",
+    ),
     path("relatorio/", views.relatorio, name="relatorio"),
-    path('relatorio/atrasos/<str:ra>/', views.detalhes_atrasos, name='detalhes_atrasos'),
-    path('excluir-aluno/', views.excluir_aluno_view, name='excluir_aluno'),
-    path('confirmar-exclusao/<str:ra>/', views.confirmar_exclusao_view, name='confirmar_exclusao'),
+    path(
+        "relatorio/atrasos/<str:ra>/", views.detalhes_atrasos, name="detalhes_atrasos"
+    ),
+    path("excluir-aluno/", views.excluir_aluno_view, name="excluir_aluno"),
+    path(
+        "confirmar-exclusao/<str:ra>/",
+        views.confirmar_exclusao_view,
+        name="confirmar_exclusao",
+    ),
 ]

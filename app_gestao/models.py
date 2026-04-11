@@ -12,15 +12,16 @@ class CadastroAlunos(models.Model):
     contato = models.CharField(max_length=20)
 
     def __str__(self):
-        #return self.nome_estudante
+        # return self.nome_estudante
         return f"{self.nome_estudante} ({self.serie_turma})"
+
 
 # tabela para registro dos atrasos
 class RegAtrasos(models.Model):
     ra = models.ForeignKey(CadastroAlunos, on_delete=models.CASCADE)
     data_atraso = models.DateField(blank=False, null=False)
     horario_chegada = models.TimeField(blank=False, null=False)
-    justificativa = models.TextField(max_length=255,blank=False, null=False)
+    justificativa = models.TextField(max_length=255, blank=False, null=False)
 
     def __str__(self):
         return f"Atraso de {self.ra} em {self.data_atraso}"
@@ -33,6 +34,4 @@ class Presenca(models.Model):
     presente = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ('aluno', 'data')
-
-
+        unique_together = ("aluno", "data")
