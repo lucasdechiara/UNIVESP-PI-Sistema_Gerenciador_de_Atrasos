@@ -4,12 +4,12 @@
 </div>
 
 
-## Projeto Integrador em Computação II - DRP14 - Turma 001 - Grupo 007
-**Ementa da disciplina Projeto Integrador em Computação II:** Resolução de problemas. Levantamento de requisitos. Desenvolvimento web com framework. HTML. CSS. Linguagem de script. Banco de Dados. Controle de Versão. Nuvem. API. Acessibilidade. Testes. Análise de dados.
+## Projeto Integrador em Computação III - DRP14 - Turma 001 - Grupo 007
+**Ementa da disciplina Projeto Integrador em Computação III:** Resolução de problemas. Levantamento de requisitos. Desenvolvimento web com framework. HTML. CSS. Linguagem de script. Banco de Dados. Controle de Versão. Nuvem. API. Acessibilidade. Testes. Análise de dados.
 
 **Carga Horária:** 80 h 
 
-**Objetivo:** Desenvolver um software com framework web que utilize banco de dados, inclua script web (Javascript), nuvem, uso de API, acessibilidade, controle de versão e testes. Opcionalmente, incluir análise de dados.
+**Objetivo:** Desenvolver um software com framework web ou aplicativo que utilize banco de dados, inclua script web (Javascript), nuvem, acessibilidade, controle de versão, integração contínua e testes. Incluir um dos seguintes requisitos: uso e fornecimento de API, análises de dados e IoT.
 
 ### Grupo:
 ALFONSO JAIME DE CARVALHO MELO USLAR
@@ -20,13 +20,14 @@ DANIELA DE PROENCA MIAO
 
 DOUGLAS RODRIGUES SILVA
 
-MARCELO ALMEIDA DE SOUZA
+FILIPE DE AGUIAR RIBEIRO
 
 LUCAS MELO DE CHIARA
 
-RAFAEL GOMES DE OLIVEIRA
+MARCELO ALMEIDA DE SOUZA
 
-ROBSON DOS SANTOS PIMENTA MARTINS
+RODRIGO BARADEL
+
 
 
 
@@ -36,7 +37,7 @@ ROBSON DOS SANTOS PIMENTA MARTINS
     <img alt="Folk" title="Fork Button" src="https://shields.io/badge/-DAR%20FORK-red.svg?&style=for-the-badge&logo=github&logoColor=white"/></a>
 
 
-## SISTEMA DE CONTROLE DE ATRASOS 2.0
+## SISTEMA DE CONTROLE DE ATRASOS 3.0
 
 **OBJETIVO:** Gerenciar o horário de entrada dos estudantes que chegam após o fechamento dos portões.
 
@@ -97,6 +98,7 @@ DATABASE_URL=postgres://postgres:"troque_pela_senha_PostgreSQL"@localhost:"porta
 * Framework CSS: Bootstrap 5
 * Ambiente de Desenvolvimento Integrado (IDE): Visual Studio Code (VSCode)
 * Sistema de Controle de Versão: Git
+* Integração Contínua: GitHub Actions
 
 
 ### Apresentação do sistema no YouTube:
@@ -105,4 +107,4 @@ DATABASE_URL=postgres://postgres:"troque_pela_senha_PostgreSQL"@localhost:"porta
 </a>
 
 
-#### Repositório destinado ao versionamento da aplicação desenvolvida na disciplina de Projeto Integrador II da UNIVESP.
+#### Repositório destinado ao versionamento da aplicação desenvolvida na disciplina de Projeto Integrador III da UNIVESP.
