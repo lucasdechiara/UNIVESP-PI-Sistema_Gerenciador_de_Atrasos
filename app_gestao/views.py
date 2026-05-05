@@ -6,7 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import Count, Q
+from django.db.models.functions import ExtractMonth
 from openpyxl.styles import PatternFill
+import datetime
 
 from .models import CadastroAlunos, Presenca, RegAtrasos
 
@@ -379,3 +382,67 @@ def confirmar_exclusao_view(request, ra):
         return redirect("excluir_aluno")  # Nome da URL correta
 
     return render(request, "app_gestao/confirmar_exclusao.html", {"aluno": aluno})
+
+
+
+
+# construção dos gráficos e ranking para o dashboard de análise de dados
+@login_required
+def dashboard_analise(request):
+    # 1. Captura de Filtros
+    mes_inicio = int(request.GET.get('mes_inicio', 1))
+    mes_fim = int(request.GET.get('mes_fim', 12))
+    turma_selecionada = request.GET.get('turma', '')
+
+    # Base de querysets
+    faltas_qs = Presenca.objects.filter(presente=False, data__month__range=(mes_inicio, mes_fim))
+    atrasos_qs = RegAtrasos.objects.filter(data_atraso__month__range=(mes_inicio, mes_fim))
+    
+    if turma_selecionada:
+        faltas_qs = faltas_qs.filter(aluno__serie_turma=turma_selecionada)
+        atrasos_qs = atrasos_qs.filter(ra__serie_turma=turma_selecionada)
+
+    # 2. Agregação para Gráficos (Meses 1 a 12)
+    faltas_por_mes = faltas_qs.annotate(mes=ExtractMonth('data')).values('mes').annotate(total=Count('id')).order_by('mes')
+    atrasos_por_mes = atrasos_qs.annotate(mes=ExtractMonth('data_atraso')).values('mes').annotate(total=Count('id')).order_by('mes')
+
+    # Preparar listas de 12 posições para o Chart.js
+    dados_faltas = [0] * 12
+    for item in faltas_por_mes:
+        dados_faltas[item['mes']-1] = item['total']
+
+    dados_atrasos = [0] * 12
+    for item in atrasos_por_mes:
+        dados_atrasos[item['mes']-1] = item['total']
+
+    # 3. Ranking de Alunos    
+    filtro_ranking = Q(regatrasos__data_atraso__month__range=(mes_inicio, mes_fim))
+    
+    if turma_selecionada:
+        ranking_atrasos = CadastroAlunos.objects.filter(serie_turma=turma_selecionada)
+    else:
+        ranking_atrasos = CadastroAlunos.objects.all()
+
+    ranking_atrasos = ranking_atrasos.annotate(
+        total_atrasos=Count(
+            'regatrasos',
+            filter=filtro_ranking
+        )
+    ).filter(total_atrasos__gt=0).order_by('-total_atrasos')[:10]
+
+    # --- AJUSTE AQUI ---
+    # Lista de turmas para o filtro: distinct() remove duplicadas e order_by() coloca em ordem alfabética
+    turmas = CadastroAlunos.objects.values_list('serie_turma', flat=True).distinct().order_by('serie_turma')
+    # -------------------
+
+    context = {
+        'dados_faltas': dados_faltas,
+        'dados_atrasos': dados_atrasos,
+        'ranking': ranking_atrasos,
+        'turmas': turmas,
+        'meses': range(1, 13),
+        'mes_inicio': mes_inicio,
+        'mes_fim': mes_fim,
+        'turma_selecionada': turma_selecionada,
+    }
+    return render(request, "app_gestao/dashboard.html", context)

@@ -8,14 +8,29 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     
+    <style>
+      /* Só aplica o espaçamento se a classe 'auth-layout' estiver presente no body */
+      body.auth-layout {
+        padding-top: 70px; 
+      }
+      
+      /* O padding inferior permanece para não cobrir o conteúdo com o footer fixo */
+      body {
+        padding-bottom: 70px;
+        background-color: #f8f9fa; /* Tom de fundo leve para evitar contraste excessivo */
+      }
+    </style>
+
     {% block titulo %}
     {% endblock %}
 
   </head>
-  <body>
+  <!-- A classe auth-layout é aplicada dinamicamente apenas se o usuário estiver autenticado -->
+  <body class="{% if user.is_authenticated %}auth-layout{% endif %}">
+
     {% if user.is_authenticated %}
-      <!-- Navbar com menu principal -->
-      <nav role="navigation" aria-label="Menu principal" style="background-color: darksalmon !important;" class="navbar navbar-expand-lg navbar-light bg-light">
+      <!-- Navbar fixa -->
+      <nav role="navigation" aria-label="Menu principal" style="background-color: darksalmon !important;" class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
         <div class="container-fluid">
           <a class="navbar-brand" href="{% url 'home' %}" aria-label="Página inicial">Home</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Alternar menu de navegação">
@@ -27,6 +42,7 @@
               <a class="nav-link" href="{% url 'registrar_presenca' %}" aria-label="Registrar Presença">Registrar Presença</a>
               <a class="nav-link" href="{% url 'registrar_atraso' %}" aria-label="Registrar Atrasos">Registrar Atrasos</a>
               <a class="nav-link" href="{% url 'relatorio' %}" aria-label="Visualizar Relatório">Relatório</a>
+              <a class="nav-link" href="{% url 'dashboard' %}" aria-label="Dashboard">Dashboard</a>
               <form action="{% url 'logout' %}" method="POST" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="nav-link btn btn-link" style="padding: 0; border: none; background: none; line-height: 2.5;" role="button" aria-label="Logout">
@@ -39,28 +55,24 @@
       </nav>
     {% endif %}
 
+    <!-- O conteúdo da página filha entra aqui -->
+    {% block conteudo %}
+    {% endblock %}
+
     <!-- Footer fixo no final da página -->
-    <footer role="contentinfo" aria-label="Rodapé do site" style="background-color: darksalmon !important;" class="bg-light text-center fixed-bottom">
+    <footer role="contentinfo" aria-label="Rodapé do site" style="background-color: darksalmon !important;" class="bg-light text-center fixed-bottom shadow-lg">
       <div class="container">
-        <p>&copy; <a style="text-decoration: none; color: black;" href="https://raw.githubusercontent.com/lucasdechiara/UNIVESP-PI-Sistema_Gerenciador_de_Atrasos/refs/heads/main/LICENSE" aria-label="Licença do projeto">2026. Projeto Integrador em Computação III - DRP14 - Turma 001 - Grupo 007</a><br>
+        <p class="mb-1">&copy; <a style="text-decoration: none; color: black;" href="https://raw.githubusercontent.com/lucasdechiara/UNIVESP-PI-Sistema_Gerenciador_de_Atrasos/refs/heads/main/LICENSE" aria-label="Licença do projeto">2026. Projeto Integrador em Computação III - DRP14 - Turma 001 - Grupo 007</a><br>
           <a style="text-decoration: none; color: black;" href="https://univesp.br/" aria-label="Site da UNIVESP"> UNIVESP - Universidade Virtual do Estado de São Paulo.</a>
         </p>
       </div>
     </footer>
 
-    {% block conteudo %}
-    {% endblock %}
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
+    {% block scripts %}
+    {% endblock %}
 
     <!-- VLibras -->
     <div vw class="enabled">

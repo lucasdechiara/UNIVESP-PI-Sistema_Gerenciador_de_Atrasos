@@ -1,0 +1,194 @@
+{% extends 'app_gestao/base.html' %}
+
+{% block titulo %}
+  <title>Dashboard</title> 
+  <style>
+    /* Trava o cabeçalho do dashboard no topo */
+    .dashboard-header-fixed {
+      position: fixed;
+      top: 56px; /* Altura da sua Navbar no base.html */
+      left: 0;
+      right: 0;
+      z-index: 1020;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Espaçador para o conteúdo não brotar por baixo do cabeçalho fixo */
+    .header-spacer {
+      margin-top: 180px; /* Ajuste essa altura conforme o tamanho dos seus filtros */
+    }
+
+    /* Garante que o container interno alinhe com o restante da página */
+    .header-container {
+      max-width: 1320px; /* Largura padrão do container do Bootstrap 5 */
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Estilo para indicar que o nome é clicável */
+    .link-aluno {
+      text-decoration: none;
+      color: #0d6efd;
+      transition: color 0.2s;
+    }
+    .link-aluno:hover {
+      color: #0a58ca;
+      text-decoration: underline;
+    }
+  </style>
+{% endblock %}
+
+{% block conteudo %}
+  <!-- SEÇÃO 100% FIXA -->
+  <div class="dashboard-header-fixed py-3">
+    <div class="header-container">
+      <h3 class="text-center h5 mb-3" id="page-title">
+        Dashboard de Análise de Dados
+      </h3>
+
+      <form method="GET" class="row g-2 p-2 bg-white rounded border mx-0">
+          <div class="col-md-3">
+              <label class="form-label fw-bold small mb-1">Mês Início:</label>
+              <select name="mes_inicio" class="form-select form-select-sm">
+                  {% for m in meses %}
+                      <option value="{{ m }}" {% if m == mes_inicio %}selected{% endif %}>Mês {{ m }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+          <div class="col-md-3">
+              <label class="form-label fw-bold small mb-1">Mês Fim (Mês Relatório):</label>
+              <select name="mes_fim" class="form-select form-select-sm">
+                  {% for m in meses %}
+                      <option value="{{ m }}" {% if m == mes_fim %}selected{% endif %}>Mês {{ m }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+          <div class="col-md-4">
+              <label class="form-label fw-bold small mb-1">Turma:</label>
+              <select name="turma" class="form-select form-select-sm">
+                  <option value="">Todas as Turmas</option>
+                  {% for t in turmas %}
+                      <option value="{{ t }}" {% if t == turma_selecionada %}selected{% endif %}>{{ t }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary btn-sm w-100">
+                  Filtrar
+              </button>
+          </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO ROLÁVEL -->
+  <div class="container header-spacer">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card p-3 shadow-sm border-0">
+                <h4 class="text-secondary h6">Faltas por Mês</h4>
+                <div style="position: relative; height:30vh;">
+                    <canvas id="chartFaltas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mb-4">
+            <div class="card p-3 shadow-sm border-0">
+                <h4 class="text-secondary h6">Atrasos por Mês</h4>
+                <div style="position: relative; height:30vh;">
+                    <canvas id="chartAtrasos"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-3 shadow-sm border-0 mb-5">
+        <h4 class="text-secondary h6 mb-3">Ranking de Atrasos</h4>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle table-sm small">
+                <thead class="table-light">
+                    <tr>
+                        <th>RA</th>
+                        <th>Série/Turma</th>
+                        <th>Nome do Estudante</th>
+                        <th class="text-center">Atrasos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for aluno in ranking %}
+                    <tr>
+                        <td class="fw-bold">{{ aluno.ra }}</td>
+                        <td>{{ aluno.serie_turma }}</td>
+                        <td>
+                            <!-- Link para detalhes: Abre em nova aba para não perder o dashboard de vista -->
+                            <a href="{% url 'detalhes_atrasos' aluno.ra %}?mes={{ mes_fim }}&turma={{ aluno.serie_turma }}" 
+                               target="_blank" 
+                               class="link-aluno"
+                               title="Clique para ver as justificativas de {{ aluno.nome_estudante }}">
+                                {{ aluno.nome_estudante }}
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill bg-danger">
+                                {{ aluno.total_atrasos }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted p-4">
+                            Nenhum registro encontrado para este período.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 120px;"></div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        const optionsGerais = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        };
+
+        new Chart(document.getElementById('chartFaltas'), {
+            type: 'bar',
+            data: {
+                labels: mesesLabels,
+                datasets: [{
+                    label: 'Faltas',
+                    data: {{ dados_faltas|safe }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                }]
+            },
+            options: optionsGerais
+        });
+
+        new Chart(document.getElementById('chartAtrasos'), {
+            type: 'bar',
+            data: {
+                labels: mesesLabels,
+                datasets: [{
+                    label: 'Atrasos',
+                    data: {{ dados_atrasos|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                }]
+            },
+            options: optionsGerais
+        });
+    });
+  </script>
+{% endblock %}
